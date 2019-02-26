@@ -216,12 +216,12 @@ func makeStatefulSet(
 		statefulset.Spec.VolumeClaimTemplates = append(statefulset.Spec.VolumeClaimTemplates, pvcTemplate)
 	}
 
-	if p.Spec.Volumes != nil && len(p.Spec.Volumes) > 0 {
-		statefulset.Spec.Template.Spec.Volumes = p.Spec.Volumes
+	if p.Spec.AdditionalVolumes != nil && len(p.Spec.AdditionalVolumes) > 0 {
+		statefulset.Spec.Template.Spec.Volumes = p.Spec.AdditionalVolumes
 	}
 
-	if p.Spec.VolumeMounts != nil && len(p.Spec.VolumeMounts) > 0 {
-		statefulset.Spec.Template.Spec.VolumeMounts = p.Spec.VolumeMounts
+	if p.Spec.AdditionalVolumeMounts != nil && len(p.Spec.AdditionalVolumeMounts) > 0 {
+		statefulset.Spec.Template.Spec.VolumeMounts = p.Spec.AdditionalVolumeMounts
 	}
 
 	return statefulset, nil
@@ -902,9 +902,9 @@ func makeStatefulSetSpec(p monitoringv1.Prometheus, c *Config, ruleConfigMapName
 				NodeSelector:                  p.Spec.NodeSelector,
 				PriorityClassName:             p.Spec.PriorityClassName,
 				TerminationGracePeriodSeconds: &terminationGracePeriod,
-				Volumes:                       volumes,
-				Tolerations:                   p.Spec.Tolerations,
-				Affinity:                      p.Spec.Affinity,
+				Volumes:     volumes,
+				Tolerations: p.Spec.Tolerations,
+				Affinity:    p.Spec.Affinity,
 			},
 		},
 	}, nil
