@@ -216,6 +216,14 @@ func makeStatefulSet(
 		statefulset.Spec.VolumeClaimTemplates = append(statefulset.Spec.VolumeClaimTemplates, pvcTemplate)
 	}
 
+	if p.Spec.Volumes != nil && len(p.Spec.Volumes) > 0 {
+		statefulset.Spec.Template.Spec.Volumes = p.Spec.Volumes
+	}
+
+	if p.Spec.VolumeMounts != nil && len(p.Spec.VolumeMounts) > 0 {
+		statefulset.Spec.Template.Spec.VolumeMounts = p.Spec.VolumeMounts
+	}
+
 	return statefulset, nil
 }
 
@@ -451,6 +459,10 @@ func makeStatefulSetSpec(p monitoringv1.Prometheus, c *Config, ruleConfigMapName
 		},
 	}
 
+	for _, volume := range p.Spec.Volumes {
+		volumes = append(volumes, volume)
+	}
+
 	for _, name := range ruleConfigMapNames {
 		volumes = append(volumes, v1.Volume{
 			Name: name,
@@ -482,6 +494,10 @@ func makeStatefulSetSpec(p monitoringv1.Prometheus, c *Config, ruleConfigMapName
 			MountPath: storageDir,
 			SubPath:   subPathForStorage(p.Spec.Storage),
 		},
+	}
+
+	for _, volumeMounts := range p.Spec.VolumeMounts {
+		promVolumeMounts = append(promVolumeMounts, volumeMounts)
 	}
 
 	for _, name := range ruleConfigMapNames {

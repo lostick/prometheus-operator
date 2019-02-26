@@ -233,6 +233,9 @@ type PrometheusSpec struct {
 	// and will discover API servers automatically and use the pod's CA certificate
 	// and bearer token file at /var/run/secrets/kubernetes.io/serviceaccount/.
 	APIServerConfig *APIServerConfig `json:"apiserverConfig,omitempty"`
+	// An optional list of volumes to be mounted in the prometheus container
+	AdditionalVolumes      []v1.Volume      `json:"additionalVolumes,omitempty"`
+	AdditionalVolumeMounts []v1.VolumeMount `json:"additionalVolumeMounts,omitempty"`
 	// Thanos configuration allows configuring various aspects of a Prometheus
 	// server in a Thanos environment.
 	//
