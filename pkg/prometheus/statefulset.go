@@ -425,6 +425,10 @@ func makeStatefulSetSpec(p monitoringv1.Prometheus, c *Config, ruleConfigMapName
 		},
 	}
 
+	for _, additionalVolume := range p.Spec.AdditionalVolumes {
+		volumes = append(volumes, additionalVolume)
+	}
+
 	for _, name := range ruleConfigMapNames {
 		volumes = append(volumes, v1.Volume{
 			Name: name,
@@ -497,6 +501,10 @@ func makeStatefulSetSpec(p monitoringv1.Prometheus, c *Config, ruleConfigMapName
 			ReadOnly:  true,
 			MountPath: configmapsDir + c,
 		})
+	}
+
+	for _, additionalVolumeMounts := range p.Spec.AdditionalVolumeMounts {
+		promVolumeMounts = append(promVolumeMounts, additionalVolumeMounts)
 	}
 
 	configReloadVolumeMounts := []v1.VolumeMount{
@@ -829,9 +837,9 @@ func makeStatefulSetSpec(p monitoringv1.Prometheus, c *Config, ruleConfigMapName
 				NodeSelector:                  p.Spec.NodeSelector,
 				PriorityClassName:             p.Spec.PriorityClassName,
 				TerminationGracePeriodSeconds: &terminationGracePeriod,
-				Volumes:                       volumes,
-				Tolerations:                   p.Spec.Tolerations,
-				Affinity:                      p.Spec.Affinity,
+				Volumes:     volumes,
+				Tolerations: p.Spec.Tolerations,
+				Affinity:    p.Spec.Affinity,
 			},
 		},
 	}, nil

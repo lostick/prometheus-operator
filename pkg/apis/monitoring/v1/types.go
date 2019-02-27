@@ -218,7 +218,9 @@ type PrometheusSpec struct {
 	// If left empty, Prometheus is assumed to run inside of the cluster
 	// and will discover API servers automatically and use the pod's CA certificate
 	// and bearer token file at /var/run/secrets/kubernetes.io/serviceaccount/.
-	APIServerConfig *APIServerConfig `json:"apiserverConfig,omitempty"`
+	APIServerConfig        *APIServerConfig `json:"apiserverConfig,omitempty"`
+	AdditionalVolumes      []v1.Volume      `json:"additionalVolumes,omitempty"`
+	AdditionalVolumeMounts []v1.VolumeMount `json:"additionalVolumeMounts,omitempty"`
 	// Thanos configuration allows configuring various aspects of a Prometheus
 	// server in a Thanos environment.
 	//
